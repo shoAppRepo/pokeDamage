@@ -269,8 +269,8 @@ class DraggableCard extends StatelessWidget {
         },
         builder: (_,__,___) {
           return SizedBox(
-            width: SizeConfig.blockSizeHorizontal * 15,
-            height: SizeConfig.blockSizeHorizontal * 15,
+            width: SizeConfig.blockSizeHorizontal * 20,
+            height: SizeConfig.blockSizeHorizontal * 20,
             child: Card(
               color: Colors.red,
               child: Column(
