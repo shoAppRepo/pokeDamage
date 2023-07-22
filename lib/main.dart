@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'config/size_config.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,6 +111,9 @@ class DraggableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 画面サイズを取得
+    SizeConfig().init(context);
+
     return LongPressDraggable(
       data: index,
       feedback: const Card(
@@ -120,14 +125,18 @@ class DraggableCard extends StatelessWidget {
           onCardSwapped(data, index);
         },
         builder: (_,__,___) {
-          return Card(
-            color: Colors.red,
-            child: Column(
-              children: [
-                Text(card['damage'].toString()),
-                Text(card['ability']),
-              ],
-            )
+          return SizedBox(
+            width: SizeConfig.blockSizeHorizontal * 15,
+            height: SizeConfig.blockSizeHorizontal * 15,
+            child: Card(
+              color: Colors.red,
+              child: Column(
+                children: [
+                  Text(card['damage'].toString()),
+                  Text(card['ability']),
+                ],
+              )
+            ),
           );
         }
       ),
