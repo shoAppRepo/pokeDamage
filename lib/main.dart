@@ -54,6 +54,12 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void resetCardData(targetIndex) {
+    setState(() {
+      cards[targetIndex] = {'damage': 0, 'ability': 'unused'};
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +77,7 @@ class _HomeState extends State<Home> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <DraggableCard>[
+                  children: [
                     for(int i = 1; i < cards.length; i++)
                       DraggableCard(
                         index: i,
@@ -80,6 +86,9 @@ class _HomeState extends State<Home> {
                           swapCardData(draggedIndex, targetIndex);
                         }
                       ),
+                    Trash(
+                      resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                    ),
                   ],
                 ),
               )
@@ -123,5 +132,26 @@ class DraggableCard extends StatelessWidget {
         }
       ),
     );
+  }
+}
+
+class Trash extends StatelessWidget {
+  final Function(int targetIndex) resetCardData;
+
+  const Trash({super.key, required this.resetCardData});
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<int>(
+        onAccept: (data) {
+          resetCardData(data);
+        },
+        builder: (_,__,___) {
+          return const Card(
+            color: Colors.grey,
+            child: Text('Trash')
+          );
+        }
+      );
   }
 }
