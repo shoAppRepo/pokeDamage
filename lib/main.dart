@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
     {'damage': 90, 'ability': 'unused'},
   ];
 
-  void changeDamage(int damage, String type) {
+  void selectDamage(int damage, String type) {
     setState(() {
       selectedDamage['damage'] = damage;
       selectedDamage['type'] = type;
@@ -66,6 +66,20 @@ class _HomeState extends State<Home> {
     setState(() {
       cards[targetIndex] = {'damage': 0, 'ability': 'unused'};
     });
+  }
+
+  void changeDamage(index) {
+    setState(() {
+      selectedDamage['type'] == '+'? damageUp(index): damageDown(index);
+    });
+  }
+
+  void damageUp(index) {
+    cards[index]['damage'] += selectedDamage['damage'];
+  }
+
+  void damageDown(index) {
+    cards[index]['damage'] -= selectedDamage['damage'];
   }
 
   @override
@@ -90,32 +104,32 @@ class _HomeState extends State<Home> {
                     DamageUpCard(
                       damage: 10,
                       selectedDamage: selectedDamage,
-                      onPressed: (damage, type) => changeDamage(damage, type),
+                      onPressed: (damage, type) => selectDamage(damage, type),
                     ),
                     DamageUpCard(
                       damage: 50,
                       selectedDamage: selectedDamage,
-                      onPressed: (damage, type) => changeDamage(damage, type),
+                      onPressed: (damage, type) => selectDamage(damage, type),
                     ),
                     DamageUpCard(
                       damage: 100,
                       selectedDamage: selectedDamage,
-                      onPressed: (damage, type) => changeDamage(damage, type),
+                      onPressed: (damage, type) => selectDamage(damage, type),
                     ),
                     DamageDownCard(
                       damage: 10,
                       selectedDamage: selectedDamage,
-                      onPressed: (damage, type) => changeDamage(damage, type),
+                      onPressed: (damage, type) => selectDamage(damage, type),
                     ),
                     DamageDownCard(
                       damage: 50,
                       selectedDamage: selectedDamage,
-                      onPressed: (damage, type) => changeDamage(damage, type),
+                      onPressed: (damage, type) => selectDamage(damage, type),
                     ),
                     DamageDownCard(
                       damage: 100,
                       selectedDamage: selectedDamage,
-                      onPressed: (damage, type) => changeDamage(damage, type),
+                      onPressed: (damage, type) => selectDamage(damage, type),
                     ),
                   ],
                 ),
@@ -125,7 +139,9 @@ class _HomeState extends State<Home> {
                 card: cards[0],
                 onCardSwapped: (draggedIndex, targetIndex) {
                   swapCardData(draggedIndex, targetIndex);
-                }),
+                },
+                changeDamage: (index) => changeDamage(index),
+              ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -137,7 +153,8 @@ class _HomeState extends State<Home> {
                         card: cards[i],
                         onCardSwapped: (draggedIndex, targetIndex) {
                           swapCardData(draggedIndex, targetIndex);
-                        }
+                        },
+                        changeDamage: (index) => changeDamage(index),
                       ),
                     Trash(
                       resetCardData: ((targetIndex) => resetCardData(targetIndex))
@@ -231,8 +248,9 @@ class DraggableCard extends StatelessWidget {
   final int index;
   final Map card;
   final Function(int draggedIndex, int targetIndex) onCardSwapped;
+  final Function(int index) changeDamage;
 
-  const DraggableCard({super.key, required this.index, required this.card, required this.onCardSwapped});
+  const DraggableCard({super.key, required this.index, required this.card, required this.onCardSwapped, required this.changeDamage});
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +275,16 @@ class DraggableCard extends StatelessWidget {
               color: Colors.red,
               child: Column(
                 children: [
-                  Text(card['damage'].toString()),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black
+                    ),
+                    onPressed: () {
+                      changeDamage(index);
+                    },
+                    child: Text(card['damage'].toString()),
+                  ),
                   Text(card['ability']),
                 ],
               )
