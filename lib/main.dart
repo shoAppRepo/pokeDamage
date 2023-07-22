@@ -134,13 +134,21 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              DraggableCard(
-                index: 0,
-                card: cards[0],
-                onCardSwapped: (draggedIndex, targetIndex) {
-                  swapCardData(draggedIndex, targetIndex);
-                },
-                changeDamage: (index) => changeDamage(index),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DraggableCard(
+                    index: 0,
+                    card: cards[0],
+                    onCardSwapped: (draggedIndex, targetIndex) {
+                      swapCardData(draggedIndex, targetIndex);
+                    },
+                    changeDamage: (index) => changeDamage(index),
+                  ),
+                  Trash(
+                      resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                    ),
+                ],
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -156,9 +164,6 @@ class _HomeState extends State<Home> {
                         },
                         changeDamage: (index) => changeDamage(index),
                       ),
-                    Trash(
-                      resetCardData: ((targetIndex) => resetCardData(targetIndex))
-                    ),
                   ],
                 ),
               )
@@ -308,9 +313,13 @@ class Trash extends StatelessWidget {
           resetCardData(data);
         },
         builder: (_,__,___) {
-          return const Card(
-            color: Colors.grey,
-            child: Text('Trash')
+          return SizedBox(
+            width: SizeConfig.blockSizeHorizontal * 20,
+            height: SizeConfig.blockSizeHorizontal * 20,
+            child: const Card(
+              color: Colors.grey,
+              child: Center(child: Text('Trash', style: TextStyle(fontSize: 20.0),))
+            ),
           );
         }
       );
