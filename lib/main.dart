@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'config/size_config.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   // 画面を横向きで固定
@@ -34,7 +33,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  var selectedDamage = {'type': '+', 'damage': 10};
   List<Map> cards = [
     {'damage': 10, 'ability': 'unused'},
     {'damage': 20, 'ability': 'unused'},
@@ -46,6 +45,13 @@ class _HomeState extends State<Home> {
     {'damage': 80, 'ability': 'unused'},
     {'damage': 90, 'ability': 'unused'},
   ];
+
+  void changeDamage(int damage, String type) {
+    setState(() {
+      selectedDamage['damage'] = damage;
+      selectedDamage['type'] = type;
+    });
+  }
 
   void swapCardData(draggedIndex, targetIndex) {
     setState(() {
@@ -64,11 +70,56 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // 画面サイズを取得
+    SizeConfig().init(context);
+
     return Scaffold(
       body: SafeArea(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SettingCard(cardText: 'ゲーム終了'),
+                    const SettingCard(cardText: 'ターン終了'),
+                    DamageUpCard(
+                      damage: 10,
+                      selectedDamage: selectedDamage,
+                      onPressed: (damage, type) => changeDamage(damage, type),
+                    ),
+                    DamageUpCard(
+                      damage: 50,
+                      selectedDamage: selectedDamage,
+                      onPressed: (damage, type) => changeDamage(damage, type),
+                    ),
+                    DamageUpCard(
+                      damage: 100,
+                      selectedDamage: selectedDamage,
+                      onPressed: (damage, type) => changeDamage(damage, type),
+                    ),
+                    DamageDownCard(
+                      damage: 10,
+                      selectedDamage: selectedDamage,
+                      onPressed: (damage, type) => changeDamage(damage, type),
+                    ),
+                    DamageDownCard(
+                      damage: 50,
+                      selectedDamage: selectedDamage,
+                      onPressed: (damage, type) => changeDamage(damage, type),
+                    ),
+                    DamageDownCard(
+                      damage: 100,
+                      selectedDamage: selectedDamage,
+                      onPressed: (damage, type) => changeDamage(damage, type),
+                    ),
+                  ],
+                ),
+              ),
               DraggableCard(
                 index: 0,
                 card: cards[0],
@@ -97,6 +148,80 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SettingCard extends StatelessWidget {
+  final String cardText;
+  const SettingCard({super.key, required this.cardText});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.grey,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(cardText),
+      )
+    );
+  }
+}
+
+class DamageUpCard extends StatelessWidget {
+  final int damage;
+  final Map<String, dynamic> selectedDamage;
+  final Function(int damage, String type) onPressed;
+
+  const DamageUpCard({super.key, required this.damage, required this.selectedDamage,required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+     const type = '+';
+
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: ElevatedButton(
+        onPressed: () {
+          onPressed(damage, type);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: damage == selectedDamage['damage'] && selectedDamage['type'] == type? Colors.blue :Colors.grey,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("$type$damage"),
+        )
+      ),
+    );
+  }
+}
+
+class DamageDownCard extends StatelessWidget {
+  final int damage;
+  final Map<String, dynamic> selectedDamage;
+  final Function(int damage, String type) onPressed;
+
+  const DamageDownCard({super.key, required this.damage, required this.selectedDamage,required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    const type = '-';
+
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: ElevatedButton(
+        onPressed: () {
+          onPressed(damage, type);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: damage == selectedDamage['damage'] && selectedDamage['type'] == type? Colors.blue :Colors.grey,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("$type$damage"),
+        )
       ),
     );
   }
