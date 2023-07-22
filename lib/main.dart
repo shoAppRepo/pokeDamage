@@ -101,7 +101,7 @@ class DraggableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable(
+    return LongPressDraggable(
       data: index,
       feedback: const Card(
         color: Colors.blue,
