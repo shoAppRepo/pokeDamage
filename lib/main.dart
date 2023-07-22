@@ -8,50 +8,73 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: DraggableCardDemo(),
+      home: Home(),
     );
   }
 }
 
-class DraggableCardDemo extends StatefulWidget {
-  const DraggableCardDemo({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _DraggableCardDemoState createState() => _DraggableCardDemoState();
+  State<Home> createState() => _HomeState();
 }
 
-class _DraggableCardDemoState extends State<DraggableCardDemo> {
-  List<String> cardList = ['Card 1', 'Card 2'];
+class _HomeState extends State<Home> {
+
+  List<Map> cards = [
+    {'damage': 10, 'ability': 'unused'},
+    {'damage': 20, 'ability': 'unused'},
+    {'damage': 30, 'ability': 'unused'},
+    {'damage': 40, 'ability': 'unused'},
+    {'damage': 50, 'ability': 'unused'},
+    {'damage': 60, 'ability': 'unused'},
+    {'damage': 70, 'ability': 'unused'},
+    {'damage': 80, 'ability': 'unused'},
+    {'damage': 90, 'ability': 'unused'},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Swappable Cards')),
-      body: Center(
-        child: Stack(
-          children: cardList
-              .asMap()
-              .map((index, cardText) {
-                return MapEntry(
-                  index,
-                  DraggableCard(
-                    cardText: cardText,
-                    index: index,
-                    cardList: cardList,
-                    onCardSwapped: (draggedIndex, targetIndex) {
-                      setState(() {
-                        // Swap the cards in the list
-                        String draggedCard = cardList[draggedIndex];
-                        cardList[draggedIndex] = cardList[targetIndex];
-                        cardList[targetIndex] = draggedCard;
-                      });
-                    },
-                  ),
-                );
-              })
-              .values
-              .toList(),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              DraggableCard(
+                index: 0,
+                card: cards[0],
+                onCardSwapped: (draggedIndex, targetIndex) {
+                  setState(() {
+                    final targetData = cards[targetIndex];
+
+                    cards[targetIndex] = cards[draggedIndex];
+                    cards[draggedIndex] = targetData;
+                  });
+                }),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <DraggableCard>[
+                    for(int i = 1; i < cards.length; i++)
+                      DraggableCard(
+                        index: i,
+                        card: cards[i],
+                        onCardSwapped: (draggedIndex, targetIndex) {
+                          setState(() {
+                            final targetData = cards[targetIndex];
+
+                            cards[targetIndex] = cards[draggedIndex];
+                            cards[draggedIndex] = targetData;
+                          });
+                        }
+                      ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -59,63 +82,35 @@ class _DraggableCardDemoState extends State<DraggableCardDemo> {
 }
 
 class DraggableCard extends StatelessWidget {
-  final String cardText;
   final int index;
-  final List<String> cardList;
+  final Map card;
   final Function(int draggedIndex, int targetIndex) onCardSwapped;
 
-  const DraggableCard({super.key,
-    required this.cardText,
-    required this.index,
-    required this.cardList,
-    required this.onCardSwapped,
-  });
+  const DraggableCard({super.key, required this.index, required this.card, required this.onCardSwapped});
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: index * 80.0, // Adjust the vertical position of each card
-      child: Draggable(
-        feedback: Material(
-          child: Card(
-            color: Colors.blue, // You can use different colors for each card.
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                cardText,
-                style: const TextStyle(fontSize: 20.0, color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-        childWhenDragging: Container(),
-        onDragCompleted: () {
-          // Handle if the drag is completed (optional).
+    return Draggable(
+      data: index,
+      feedback: const Card(
+        color: Colors.blue,
+        child: Text('moving')
+      ),
+      child: DragTarget<int>(
+        onAccept: (data) {
+          onCardSwapped(data, index);
         },
-        onDraggableCanceled: (_, __) {
-          // Handle if the drag is canceled (optional).
-        },
-        data: cardText,
-        child: DragTarget<String>(
-          onWillAccept: (data) => data != cardText,
-          onAccept: (data) {
-            int draggedIndex = cardList.indexOf(data);
-            int targetIndex = cardList.indexOf(cardText);
-            onCardSwapped(draggedIndex, targetIndex);
-          },
-          builder: (_, __, ___) {
-            return Card(
-              color: Colors.blue, // You can use different colors for each card.
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  cardText,
-                  style: const TextStyle(fontSize: 20.0, color: Colors.white),
-                ),
-              ),
-            );
-          },
-        ),
+        builder: (_,__,___) {
+          return Card(
+            color: Colors.red,
+            child: Column(
+              children: [
+                Text(card['damage'].toString()),
+                Text(card['ability']),
+              ],
+            )
+          );
+        }
       ),
     );
   }
