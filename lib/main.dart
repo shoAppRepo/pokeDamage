@@ -45,6 +45,15 @@ class _HomeState extends State<Home> {
     {'damage': 90, 'ability': 'unused'},
   ];
 
+  void swapCardData(draggedIndex, targetIndex) {
+    setState(() {
+      final targetData = cards[targetIndex];
+
+      cards[targetIndex] = cards[draggedIndex];
+      cards[draggedIndex] = targetData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,12 +65,7 @@ class _HomeState extends State<Home> {
                 index: 0,
                 card: cards[0],
                 onCardSwapped: (draggedIndex, targetIndex) {
-                  setState(() {
-                    final targetData = cards[targetIndex];
-
-                    cards[targetIndex] = cards[draggedIndex];
-                    cards[draggedIndex] = targetData;
-                  });
+                  swapCardData(draggedIndex, targetIndex);
                 }),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -73,12 +77,7 @@ class _HomeState extends State<Home> {
                         index: i,
                         card: cards[i],
                         onCardSwapped: (draggedIndex, targetIndex) {
-                          setState(() {
-                            final targetData = cards[targetIndex];
-
-                            cards[targetIndex] = cards[draggedIndex];
-                            cards[draggedIndex] = targetData;
-                          });
+                          swapCardData(draggedIndex, targetIndex);
                         }
                       ),
                   ],
