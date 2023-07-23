@@ -51,6 +51,7 @@ class _HomeState extends State<Home> {
     cards.asMap().forEach((index, _) {
       resetCardData(index);
      });
+     changeSupport();
   }
 
   void turnEnd() {
@@ -224,14 +225,14 @@ class SettingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onPressed(),
-      child: Card(
-        color: Colors.grey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(cardText),
-        )
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: ElevatedButton(
+        onPressed: () => onPressed(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.grey,
+        ),
+        child: Text(cardText)
       ),
     );
   }
@@ -324,7 +325,7 @@ class DraggableCard extends StatelessWidget {
             width: SizeConfig.blockSizeHorizontal * 20,
             height: SizeConfig.blockSizeHorizontal * 20,
             child: Card(
-              color: Colors.red,
+              color: Colors.lightBlue[300],
               child: Column(
                 children: [
                   ElevatedButton(
@@ -390,7 +391,7 @@ class Support extends StatelessWidget {
                 width: SizeConfig.blockSizeHorizontal * 20,
                 height: SizeConfig.blockSizeHorizontal * 20,
                 child: const Card(
-                  color: Colors.grey,
+                  color: Colors.red,
                   child: Center(child: Text('済み', style: TextStyle(fontSize: 20.0),))
                 ),
               ): SizedBox(
