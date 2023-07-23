@@ -117,6 +117,7 @@ class _HomeState extends State<Home> {
     SizeConfig().init(context);
 
     return Scaffold(
+      backgroundColor: Colors.lightGreen[200],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -312,8 +313,8 @@ class DraggableCard extends StatelessWidget {
 
     return LongPressDraggable(
       data: index,
-      feedback: const Card(
-        color: Colors.blue,
+      feedback: Card(
+        color: Colors.teal,
         child: Text('moving')
       ),
       child: DragTarget<int>(
@@ -325,7 +326,8 @@ class DraggableCard extends StatelessWidget {
             width: SizeConfig.blockSizeHorizontal * 16,
             height: SizeConfig.blockSizeHorizontal * 16,
             child: Card(
-              color: Colors.lightBlue[300],
+              elevation: 5,
+              color: Colors.amber,
               child: Column(
                 children: [
                   ElevatedButton(
@@ -392,17 +394,31 @@ class Support extends StatelessWidget {
           key: const ValueKey(true),
                 width: SizeConfig.blockSizeHorizontal * 20,
                 height: SizeConfig.blockSizeHorizontal * 15,
-                child: const Card(
+                child: Card(
+                  elevation: 5,
                   color: Colors.red,
-                  child: Center(child: Text('済み', style: TextStyle(fontSize: 20.0),))
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.check_circle),
+                      Text('使用済', style: TextStyle(fontSize: 20.0),),
+                    ],
+                  )
                 ),
               ): SizedBox(
                 key: const ValueKey(false),
                 width: SizeConfig.blockSizeHorizontal * 20,
                 height: SizeConfig.blockSizeHorizontal * 15,
-                child: const Card(
+                child: Card(
+                  elevation: 5,
                   color: Colors.white,
-                  child: Center(child: Text('サポート', style: TextStyle(fontSize: 20.0),))
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.person),
+                      Text('サポート', style: TextStyle(fontSize: 20.0),),
+                    ],
+                  )
                 )
               ),
       ),
@@ -425,9 +441,16 @@ class Trash extends StatelessWidget {
           return SizedBox(
             width: SizeConfig.blockSizeHorizontal * 20,
             height: SizeConfig.blockSizeHorizontal * 15,
-            child: const Card(
+            child: Card(
+              elevation: 5,
               color: Colors.grey,
-              child: Center(child: Text('Trash', style: TextStyle(fontSize: 20.0),))
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.delete),
+                  Text('Trash', style: TextStyle(fontSize: 20.0),),
+                ],
+              )
             ),
           );
         }
