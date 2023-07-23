@@ -110,7 +110,9 @@ class _HomeState extends State<Home> {
   }
 
   void damageDown(index) {
-    cards[index]['damage'] -= selectedDamage['damage'];
+    final latestDamage = cards[index]['damage'] - selectedDamage['damage'];
+
+    cards[index]['damage'] = latestDamage < 0 ? 0: latestDamage;
   }
 
   void changeAbility(index) {
