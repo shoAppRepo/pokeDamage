@@ -37,15 +37,15 @@ class _HomeState extends State<Home> {
   var isUsedSupport = false;
   var isUsedPower = false;
   List<Map> cards = [
-    {'damage': 10, 'ability': false},
-    {'damage': 20, 'ability': false},
-    {'damage': 30, 'ability': false},
-    {'damage': 40, 'ability': false},
-    {'damage': 50, 'ability': false},
-    {'damage': 60, 'ability': false},
-    {'damage': 70, 'ability': false},
-    {'damage': 80, 'ability': false},
-    {'damage': 90, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
+    {'damage': 0, 'ability': false},
   ];
 
   void allReset() {
@@ -485,7 +485,7 @@ class Power extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Icon(Icons.star),
-                      Text('Power', style: TextStyle(fontSize: 20.0),),
+                      Text('特殊技', style: TextStyle(fontSize: 20.0),),
                     ],
                   )
                 )
