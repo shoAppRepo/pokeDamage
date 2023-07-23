@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
     SizeConfig().init(context);
 
     return Scaffold(
-      backgroundColor: Colors.lightGreen[600],
+      // backgroundColor: Colors.lightBlue[200],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -272,11 +272,11 @@ class DamageUpCard extends StatelessWidget {
           onPressed(damage, type);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: damage == selectedDamage['damage'] && selectedDamage['type'] == type? Colors.blue :Colors.grey,
+          backgroundColor: damage == selectedDamage['damage'] && selectedDamage['type'] == type? Colors.yellow[400] :Colors.grey,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text("$type$damage"),
+          child: Text("$type$damage", style: const TextStyle(color: Colors.black)),
         )
       ),
     );
@@ -301,11 +301,11 @@ class DamageDownCard extends StatelessWidget {
           onPressed(damage, type);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: damage == selectedDamage['damage'] && selectedDamage['type'] == type? Colors.blue :Colors.grey,
+          backgroundColor: damage == selectedDamage['damage'] && selectedDamage['type'] == type? Colors.yellow[400] :Colors.grey,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text("$type$damage"),
+          child: Text("$type$damage", style: const TextStyle(color: Colors.black)),
         )
       ),
     );
@@ -326,13 +326,13 @@ class DraggableCard extends StatelessWidget {
     // 画面サイズを取得
     SizeConfig().init(context);
 
-    Widget PokeCard() {
+    Widget pokeCard() {
       return SizedBox(
         width: SizeConfig.blockSizeHorizontal * 16,
         height: SizeConfig.blockSizeHorizontal * 16,
         child: Card(
           elevation: 5,
-          color: Colors.amber,
+          color: Colors.blue[600],
           child: Column(
             children: [
               ElevatedButton(
@@ -360,8 +360,8 @@ class DraggableCard extends StatelessWidget {
                 ):
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orangeAccent[100],
-                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.lightBlue,
+                    foregroundColor: Colors.white,
                     padding: EdgeInsets.zero,
                   ),
                   onPressed: () {
@@ -378,13 +378,13 @@ class DraggableCard extends StatelessWidget {
 
     return LongPressDraggable(
       data: index,
-      feedback: PokeCard(),
+      feedback: pokeCard(),
       child: DragTarget<int>(
         onAccept: (data) {
           onCardSwapped(data, index);
         },
         builder: (_,__,___) {
-          return PokeCard();
+          return pokeCard();
         }
       ),
     );
@@ -411,12 +411,12 @@ class Support extends StatelessWidget {
                 height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
-                  color: Colors.red,
+                  color: Colors.red[600],
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.person),
-                      Text('使用済', style: TextStyle(fontSize: 20.0),),
+                      Icon(Icons.person, color: Colors.white,),
+                      Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
                     ],
                   )
                 ),
@@ -461,12 +461,12 @@ class Power extends StatelessWidget {
                 height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
-                  color: Colors.red,
+                  color: Colors.red[600],
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.star),
-                      Text('使用済', style: TextStyle(fontSize: 20.0),),
+                      Icon(Icons.star, color: Colors.white),
+                      Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
                     ],
                   )
                 ),
