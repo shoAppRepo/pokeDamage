@@ -54,6 +54,8 @@ class _HomeState extends State<Home> {
      });
      isUsedSupport = false;
      isUsedPower = false;
+
+     selectedDamage = {'type': '+', 'damage': 10};
   }
 
   void turnEnd() {
