@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
     cards.asMap().forEach((index, _) {
       resetCardData(index);
      });
-     changeSupport();
+     isUsedSupport = false;
   }
 
   void turnEnd() {
@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
       cards.asMap().forEach((index, _) {
         cards[index]['ability'] = false;
       });
-      changeSupport();
+      isUsedSupport = false;
     });
   }
 
@@ -322,8 +322,8 @@ class DraggableCard extends StatelessWidget {
         },
         builder: (_,__,___) {
           return SizedBox(
-            width: SizeConfig.blockSizeHorizontal * 20,
-            height: SizeConfig.blockSizeHorizontal * 20,
+            width: SizeConfig.blockSizeHorizontal * 16,
+            height: SizeConfig.blockSizeHorizontal * 16,
             child: Card(
               color: Colors.lightBlue[300],
               child: Column(
@@ -336,29 +336,31 @@ class DraggableCard extends StatelessWidget {
                     onPressed: () {
                       changeDamage(index);
                     },
-                    child: Text(card['damage'].toString()),
+                    child: Text(card['damage'].toString(), style: const TextStyle(fontSize: 20.0),),
                   ),
                   AnimatedSwitcher(
                     duration: const Duration(seconds: 0),
                     child: card['ability']? ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey,
-                        foregroundColor: Colors.white
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         changeAbility(index);
                       },
-                      child: const Text('used'),
+                      child: const Text('used', style: TextStyle(fontSize: 15.0)),
                     ):
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orangeAccent[100],
-                        foregroundColor: Colors.black
+                        foregroundColor: Colors.black,
+                        padding: EdgeInsets.zero,
                       ),
                       onPressed: () {
                         changeAbility(index);
                       },
-                      child: const Text('unused'),
+                      child: const Text('unused', style: TextStyle(fontSize: 15.0)),
                     ),
                   ),
                 ],
@@ -389,7 +391,7 @@ class Support extends StatelessWidget {
         child: isUsedSuppord? SizedBox(
           key: const ValueKey(true),
                 width: SizeConfig.blockSizeHorizontal * 20,
-                height: SizeConfig.blockSizeHorizontal * 20,
+                height: SizeConfig.blockSizeHorizontal * 15,
                 child: const Card(
                   color: Colors.red,
                   child: Center(child: Text('済み', style: TextStyle(fontSize: 20.0),))
@@ -397,7 +399,7 @@ class Support extends StatelessWidget {
               ): SizedBox(
                 key: const ValueKey(false),
                 width: SizeConfig.blockSizeHorizontal * 20,
-                height: SizeConfig.blockSizeHorizontal * 20,
+                height: SizeConfig.blockSizeHorizontal * 15,
                 child: const Card(
                   color: Colors.white,
                   child: Center(child: Text('サポート', style: TextStyle(fontSize: 20.0),))
@@ -422,7 +424,7 @@ class Trash extends StatelessWidget {
         builder: (_,__,___) {
           return SizedBox(
             width: SizeConfig.blockSizeHorizontal * 20,
-            height: SizeConfig.blockSizeHorizontal * 20,
+            height: SizeConfig.blockSizeHorizontal * 15,
             child: const Card(
               color: Colors.grey,
               child: Center(child: Text('Trash', style: TextStyle(fontSize: 20.0),))
