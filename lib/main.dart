@@ -35,15 +35,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var selectedDamage = {'type': '+', 'damage': 10};
   List<Map> cards = [
-    {'damage': 10, 'ability': 'unused'},
-    {'damage': 20, 'ability': 'unused'},
-    {'damage': 30, 'ability': 'unused'},
-    {'damage': 40, 'ability': 'unused'},
-    {'damage': 50, 'ability': 'unused'},
-    {'damage': 60, 'ability': 'unused'},
-    {'damage': 70, 'ability': 'unused'},
-    {'damage': 80, 'ability': 'unused'},
-    {'damage': 90, 'ability': 'unused'},
+    {'damage': 10, 'ability': false},
+    {'damage': 20, 'ability': false},
+    {'damage': 30, 'ability': false},
+    {'damage': 40, 'ability': false},
+    {'damage': 50, 'ability': false},
+    {'damage': 60, 'ability': false},
+    {'damage': 70, 'ability': false},
+    {'damage': 80, 'ability': false},
+    {'damage': 90, 'ability': false},
   ];
 
   void selectDamage(int damage, String type) {
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
 
   void resetCardData(targetIndex) {
     setState(() {
-      cards[targetIndex] = {'damage': 0, 'ability': 'unused'};
+      cards[targetIndex] = {'damage': 0, 'ability': false};
     });
   }
 
@@ -80,6 +80,12 @@ class _HomeState extends State<Home> {
 
   void damageDown(index) {
     cards[index]['damage'] -= selectedDamage['damage'];
+  }
+
+  void changeAbility(index) {
+    setState(() {
+      cards[index]['ability'] = !cards[index]['ability'];
+    });
   }
 
   @override
@@ -147,6 +153,7 @@ class _HomeState extends State<Home> {
                       swapCardData(draggedIndex, targetIndex);
                     },
                     changeDamage: (index) => changeDamage(index),
+                    changeAbility: (index) => changeAbility(index),
                   ),
                   Trash(
                     resetCardData: ((targetIndex) => resetCardData(targetIndex))
@@ -166,6 +173,7 @@ class _HomeState extends State<Home> {
                           swapCardData(draggedIndex, targetIndex);
                         },
                         changeDamage: (index) => changeDamage(index),
+                        changeAbility: (index) => changeAbility(index),
                       ),
                   ],
                 ),
@@ -257,8 +265,9 @@ class DraggableCard extends StatelessWidget {
   final Map card;
   final Function(int draggedIndex, int targetIndex) onCardSwapped;
   final Function(int index) changeDamage;
+  final Function(int index) changeAbility;
 
-  const DraggableCard({super.key, required this.index, required this.card, required this.onCardSwapped, required this.changeDamage});
+  const DraggableCard({super.key, required this.index, required this.card, required this.onCardSwapped, required this.changeDamage, required this.changeAbility});
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +302,29 @@ class DraggableCard extends StatelessWidget {
                     },
                     child: Text(card['damage'].toString()),
                   ),
-                  Text(card['ability']),
+                  AnimatedSwitcher(
+                    duration: const Duration(seconds: 0),
+                    child: card['ability']? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        foregroundColor: Colors.white
+                      ),
+                      onPressed: () {
+                        changeAbility(index);
+                      },
+                      child: const Text('used'),
+                    ):
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orangeAccent[100],
+                        foregroundColor: Colors.black
+                      ),
+                      onPressed: () {
+                        changeAbility(index);
+                      },
+                      child: const Text('unused'),
+                    ),
+                  ),
                 ],
               )
             ),
