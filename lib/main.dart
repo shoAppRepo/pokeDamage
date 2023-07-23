@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
     SizeConfig().init(context);
 
     return Scaffold(
-      backgroundColor: Colors.lightGreen[200],
+      backgroundColor: Colors.lightGreen[600],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
