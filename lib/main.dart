@@ -419,9 +419,12 @@ class Support extends StatelessWidget {
                   color: Colors.red[600],
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.person, color: Colors.white,),
-                      Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Image.asset('assets/images/pokemon-trainer.png'),
+                      ),
+                      const Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
                     ],
                   )
                 ),
@@ -434,9 +437,12 @@ class Support extends StatelessWidget {
                   color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.person),
-                      Text('サポート', style: TextStyle(fontSize: 20.0),),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Image.asset('assets/images/pokemon-trainer.png'),
+                      ),
+                      const Text('サポート', style: TextStyle(fontSize: 20.0),),
                     ],
                   )
                 )
@@ -469,9 +475,12 @@ class Power extends StatelessWidget {
                   color: Colors.red[600],
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.star, color: Colors.white),
-                      Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Image.asset('assets/images/monster_ball.png'),
+                      ),
+                      const Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
                     ],
                   )
                 ),
@@ -484,9 +493,12 @@ class Power extends StatelessWidget {
                   color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.star),
-                      Text('特殊技', style: TextStyle(fontSize: 20.0),),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Image.asset('assets/images/monster_ball.png'),
+                      ),
+                      const Text('特殊技', style: TextStyle(fontSize: 20.0),),
                     ],
                   )
                 )
