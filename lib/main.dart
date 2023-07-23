@@ -326,64 +326,65 @@ class DraggableCard extends StatelessWidget {
     // 画面サイズを取得
     SizeConfig().init(context);
 
+    Widget PokeCard() {
+      return SizedBox(
+        width: SizeConfig.blockSizeHorizontal * 16,
+        height: SizeConfig.blockSizeHorizontal * 16,
+        child: Card(
+          elevation: 5,
+          color: Colors.amber,
+          child: Column(
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black
+                ),
+                onPressed: () {
+                  changeDamage(index);
+                },
+                child: Text(card['damage'].toString(), style: const TextStyle(fontSize: 20.0),),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(seconds: 0),
+                child: card['ability']? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.zero,
+                  ),
+                  onPressed: () {
+                    changeAbility(index);
+                  },
+                  child: const Text('used', style: TextStyle(fontSize: 15.0)),
+                ):
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orangeAccent[100],
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.zero,
+                  ),
+                  onPressed: () {
+                    changeAbility(index);
+                  },
+                  child: const Text('unused', style: TextStyle(fontSize: 15.0)),
+                ),
+              ),
+            ],
+          )
+        ),
+      );
+    }
+
     return LongPressDraggable(
       data: index,
-      feedback: Card(
-        color: Colors.teal,
-        child: Text('moving')
-      ),
+      feedback: PokeCard(),
       child: DragTarget<int>(
         onAccept: (data) {
           onCardSwapped(data, index);
         },
         builder: (_,__,___) {
-          return SizedBox(
-            width: SizeConfig.blockSizeHorizontal * 16,
-            height: SizeConfig.blockSizeHorizontal * 16,
-            child: Card(
-              elevation: 5,
-              color: Colors.amber,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black
-                    ),
-                    onPressed: () {
-                      changeDamage(index);
-                    },
-                    child: Text(card['damage'].toString(), style: const TextStyle(fontSize: 20.0),),
-                  ),
-                  AnimatedSwitcher(
-                    duration: const Duration(seconds: 0),
-                    child: card['ability']? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                      ),
-                      onPressed: () {
-                        changeAbility(index);
-                      },
-                      child: const Text('used', style: TextStyle(fontSize: 15.0)),
-                    ):
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orangeAccent[100],
-                        foregroundColor: Colors.black,
-                        padding: EdgeInsets.zero,
-                      ),
-                      onPressed: () {
-                        changeAbility(index);
-                      },
-                      child: const Text('unused', style: TextStyle(fontSize: 15.0)),
-                    ),
-                  ),
-                ],
-              )
-            ),
-          );
+          return PokeCard();
         }
       ),
     );
