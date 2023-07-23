@@ -35,6 +35,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var selectedDamage = {'type': '+', 'damage': 10};
   var isUsedSupport = false;
+  var isUsedPower = false;
   List<Map> cards = [
     {'damage': 10, 'ability': false},
     {'damage': 20, 'ability': false},
@@ -52,6 +53,7 @@ class _HomeState extends State<Home> {
       resetCardData(index);
      });
      isUsedSupport = false;
+     isUsedPower = false;
   }
 
   void turnEnd() {
@@ -73,6 +75,12 @@ class _HomeState extends State<Home> {
   void changeSupport() {
     setState(() {
       isUsedSupport = !isUsedSupport;
+    });
+  }
+
+  void usePower() {
+    setState(() {
+      isUsedPower = true;
     });
   }
 
@@ -173,10 +181,17 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Support(
-                    isUsedSuppord: isUsedSupport,
-                    resetCardData: ((targetIndex) => resetCardData(targetIndex)),
-                    changeSupport: changeSupport,
+                  Column(
+                    children: [
+                      Support(
+                        isUsedSuppord: isUsedSupport,
+                        changeSupport: changeSupport,
+                      ),
+                      Power(
+                        isUsedPower: isUsedPower,
+                        usePower: usePower,
+                      ),
+                    ],
                   ),
                   DraggableCard(
                     index: 0,
@@ -377,10 +392,9 @@ class DraggableCard extends StatelessWidget {
 
 class Support extends StatelessWidget {
   final bool isUsedSuppord;
-  final Function(int targetIndex) resetCardData;
   final Function() changeSupport;
 
-  const Support({super.key, required this.isUsedSuppord, required this.resetCardData, required this.changeSupport});
+  const Support({super.key, required this.isUsedSuppord, required this.changeSupport});
 
   @override
   Widget build(BuildContext context) {
@@ -393,14 +407,14 @@ class Support extends StatelessWidget {
         child: isUsedSuppord? SizedBox(
           key: const ValueKey(true),
                 width: SizeConfig.blockSizeHorizontal * 20,
-                height: SizeConfig.blockSizeHorizontal * 15,
+                height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
                   color: Colors.red,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.check_circle),
+                      Icon(Icons.person),
                       Text('使用済', style: TextStyle(fontSize: 20.0),),
                     ],
                   )
@@ -408,7 +422,7 @@ class Support extends StatelessWidget {
               ): SizedBox(
                 key: const ValueKey(false),
                 width: SizeConfig.blockSizeHorizontal * 20,
-                height: SizeConfig.blockSizeHorizontal * 15,
+                height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
                   color: Colors.white,
@@ -417,6 +431,56 @@ class Support extends StatelessWidget {
                     children: const [
                       Icon(Icons.person),
                       Text('サポート', style: TextStyle(fontSize: 20.0),),
+                    ],
+                  )
+                )
+              ),
+      ),
+    );
+  }
+}
+
+class Power extends StatelessWidget {
+  final bool isUsedPower;
+  final Function() usePower;
+
+  const Power({super.key, required this.isUsedPower, required this.usePower});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        usePower();
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(seconds: 0),
+        child: isUsedPower? SizedBox(
+          key: const ValueKey(true),
+                width: SizeConfig.blockSizeHorizontal * 20,
+                height: SizeConfig.blockSizeHorizontal * 8,
+                child: Card(
+                  elevation: 5,
+                  color: Colors.red,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.star),
+                      Text('使用済', style: TextStyle(fontSize: 20.0),),
+                    ],
+                  )
+                ),
+              ): SizedBox(
+                key: const ValueKey(false),
+                width: SizeConfig.blockSizeHorizontal * 20,
+                height: SizeConfig.blockSizeHorizontal * 8,
+                child: Card(
+                  elevation: 5,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.star),
+                      Text('Power', style: TextStyle(fontSize: 20.0),),
                     ],
                   )
                 )
