@@ -34,6 +34,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var selectedDamage = {'type': '+', 'damage': 10};
+  var isUsedSupport = false;
   List<Map> cards = [
     {'damage': 10, 'ability': false},
     {'damage': 20, 'ability': false},
@@ -46,10 +47,31 @@ class _HomeState extends State<Home> {
     {'damage': 90, 'ability': false},
   ];
 
+  void allReset() {
+    cards.asMap().forEach((index, _) {
+      resetCardData(index);
+     });
+  }
+
+  void turnEnd() {
+    setState(() {
+      cards.asMap().forEach((index, _) {
+        cards[index]['ability'] = false;
+      });
+      changeSupport();
+    });
+  }
+
   void selectDamage(int damage, String type) {
     setState(() {
       selectedDamage['damage'] = damage;
       selectedDamage['type'] = type;
+    });
+  }
+
+  void changeSupport() {
+    setState(() {
+      isUsedSupport = !isUsedSupport;
     });
   }
 
@@ -105,8 +127,14 @@ class _HomeState extends State<Home> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SettingCard(cardText: 'ゲーム終了'),
-                    const SettingCard(cardText: 'ターン終了'),
+                    SettingCard(
+                      cardText: 'ゲーム終了',
+                      onPressed: () => allReset(),
+                    ),
+                    SettingCard(
+                      cardText: 'ターン終了',
+                      onPressed: () => turnEnd(),
+                    ),
                     DamageUpCard(
                       damage: 10,
                       selectedDamage: selectedDamage,
@@ -144,7 +172,9 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Support(
-                    resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                    isUsedSuppord: isUsedSupport,
+                    resetCardData: ((targetIndex) => resetCardData(targetIndex)),
+                    changeSupport: changeSupport,
                   ),
                   DraggableCard(
                     index: 0,
@@ -188,16 +218,21 @@ class _HomeState extends State<Home> {
 
 class SettingCard extends StatelessWidget {
   final String cardText;
-  const SettingCard({super.key, required this.cardText});
+  final Function() onPressed;
+
+  const SettingCard({super.key, required this.cardText, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(cardText),
-      )
+    return GestureDetector(
+      onTap: () => onPressed(),
+      child: Card(
+        color: Colors.grey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(cardText),
+        )
+      ),
     );
   }
 }
@@ -335,29 +370,22 @@ class DraggableCard extends StatelessWidget {
   }
 }
 
-class Support extends StatefulWidget {
+class Support extends StatelessWidget {
+  final bool isUsedSuppord;
   final Function(int targetIndex) resetCardData;
+  final Function() changeSupport;
 
-  const Support({super.key, required this.resetCardData});
-
-  @override
-  State<Support> createState() => _SupportState();
-}
-
-class _SupportState extends State<Support> {
-  bool _isUsed = false;
+  const Support({super.key, required this.isUsedSuppord, required this.resetCardData, required this.changeSupport});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _isUsed = !_isUsed;
-        });
+        changeSupport();
       },
       child: AnimatedSwitcher(
         duration: const Duration(seconds: 0),
-        child: _isUsed? SizedBox(
+        child: isUsedSuppord? SizedBox(
           key: const ValueKey(true),
                 width: SizeConfig.blockSizeHorizontal * 20,
                 height: SizeConfig.blockSizeHorizontal * 20,
