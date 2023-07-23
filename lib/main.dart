@@ -137,6 +137,9 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Support(
+                    resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                  ),
                   DraggableCard(
                     index: 0,
                     card: cards[0],
@@ -146,8 +149,8 @@ class _HomeState extends State<Home> {
                     changeDamage: (index) => changeDamage(index),
                   ),
                   Trash(
-                      resetCardData: ((targetIndex) => resetCardData(targetIndex))
-                    ),
+                    resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                  ),
                 ],
               ),
               SingleChildScrollView(
@@ -296,6 +299,50 @@ class DraggableCard extends StatelessWidget {
             ),
           );
         }
+      ),
+    );
+  }
+}
+
+class Support extends StatefulWidget {
+  final Function(int targetIndex) resetCardData;
+
+  const Support({super.key, required this.resetCardData});
+
+  @override
+  State<Support> createState() => _SupportState();
+}
+
+class _SupportState extends State<Support> {
+  bool _isUsed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isUsed = !_isUsed;
+        });
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(seconds: 0),
+        child: _isUsed? SizedBox(
+          key: const ValueKey(true),
+                width: SizeConfig.blockSizeHorizontal * 20,
+                height: SizeConfig.blockSizeHorizontal * 20,
+                child: const Card(
+                  color: Colors.grey,
+                  child: Center(child: Text('済み', style: TextStyle(fontSize: 20.0),))
+                ),
+              ): SizedBox(
+                key: const ValueKey(false),
+                width: SizeConfig.blockSizeHorizontal * 20,
+                height: SizeConfig.blockSizeHorizontal * 20,
+                child: const Card(
+                  color: Colors.white,
+                  child: Center(child: Text('サポート', style: TextStyle(fontSize: 20.0),))
+                )
+              ),
       ),
     );
   }
