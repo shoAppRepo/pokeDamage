@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   drag_and_drop_gridview: ^1.0.8
   reorderableitemsview: ^2.0.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +52,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
 
 # The following section is specific to Flutter packages.
 flutter:
