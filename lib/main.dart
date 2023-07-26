@@ -39,6 +39,7 @@ class _HomeState extends State<Home> {
   var isUsedEnergy = false;
   var isUsedVSTAR = false;
   var isUsedGX = false;
+  var lostZoneNumber = 0;
 
   List<Map> cards = [
     {'damage': 0, 'ability': false},
@@ -60,6 +61,7 @@ class _HomeState extends State<Home> {
      isUsedEnergy = false;
      isUsedVSTAR= false;
      isUsedGX= false;
+     lostZoneNumber = 0;
 
      selectedDamage = {'type': '+', 'damage': 10};
   }
@@ -102,6 +104,20 @@ class _HomeState extends State<Home> {
   void useGX() {
     setState(() {
       isUsedGX = true;
+    });
+  }
+
+  void plusLost() {
+    setState(() {
+      lostZoneNumber++;
+    });
+  }
+
+  void minusLost() {
+    setState(() {
+      if(lostZoneNumber >= 1) {
+        lostZoneNumber--;
+      }
     });
   }
 
@@ -249,8 +265,17 @@ class _HomeState extends State<Home> {
                     changeDamage: (index) => changeDamage(index),
                     changeAbility: (index) => changeAbility(index),
                   ),
-                  Trash(
-                    resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                  Row(
+                    children: [
+                      LostZone(
+                        number: lostZoneNumber,
+                        plus: (() => plusLost()),
+                        minus: (() => minusLost()),
+                      ),
+                      Trash(
+                        resetCardData: ((targetIndex) => resetCardData(targetIndex))
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -554,6 +579,62 @@ class Power extends StatelessWidget {
   }
 }
 
+class LostZone extends StatelessWidget {
+  final int number;
+  final Function() plus;
+  final Function() minus;
+
+  const LostZone({super.key, required this.number, required this.plus, required this.minus});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: SizeConfig.blockSizeHorizontal * 10,
+      height: SizeConfig.blockSizeHorizontal * 16,
+      child: Card(
+        elevation: 5,
+        color: Colors.grey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('ロスト', style: TextStyle(fontSize: 15.0),),
+                  SizedBox(
+                    width: 70,
+                    height: 40,
+                    child: Card(child: Center(child: Text(number.toString()))),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(), // paddingをなくす
+                        onPressed: plus,
+                        icon: const Icon(Icons.arrow_circle_up_rounded),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(), // paddingをなくす
+                        onPressed: minus,
+                        icon: const Icon(Icons.arrow_circle_down_rounded),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
+        )
+      ),
+    );
+  }
+}
+
 class Trash extends StatelessWidget {
   final Function(int targetIndex) resetCardData;
 
@@ -572,12 +653,21 @@ class Trash extends StatelessWidget {
             child: Card(
               elevation: 5,
               color: Colors.grey,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.delete),
-                  Text('Trash', style: TextStyle(fontSize: 20.0),),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.delete),
+                        Text('Trash', style: TextStyle(fontSize: 20.0),),
+                      ],
+                    ),
+                    const Text('※リセットしたいカードをドラッグしてください', style: TextStyle(fontSize: 10.0),),
+                  ],
+                ),
               )
             ),
           );
