@@ -36,7 +36,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var selectedDamage = {'type': '+', 'damage': 10};
   var isUsedSupport = false;
-  var isUsedPower = false;
+  var isUsedEnergy = false;
+  var isUsedVSTAR = false;
+  var isUsedGX = false;
+
   List<Map> cards = [
     {'damage': 0, 'ability': false},
     {'damage': 0, 'ability': false},
@@ -54,7 +57,9 @@ class _HomeState extends State<Home> {
       resetCardData(index);
      });
      isUsedSupport = false;
-     isUsedPower = false;
+     isUsedEnergy = false;
+     isUsedVSTAR= false;
+     isUsedGX= false;
 
      selectedDamage = {'type': '+', 'damage': 10};
   }
@@ -65,6 +70,7 @@ class _HomeState extends State<Home> {
         cards[index]['ability'] = false;
       });
       isUsedSupport = false;
+     isUsedEnergy = false;
     });
   }
 
@@ -75,15 +81,27 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void changeSupport() {
+  void changeSupportStatus() {
     setState(() {
       isUsedSupport = !isUsedSupport;
     });
   }
 
-  void usePower() {
+  void changeEnergyStatus() {
     setState(() {
-      isUsedPower = true;
+      isUsedEnergy = !isUsedEnergy;
+    });
+  }
+
+  void useVSTAR() {
+    setState(() {
+      isUsedVSTAR = true;
+    });
+  }
+
+  void useGX() {
+    setState(() {
+      isUsedGX = true;
     });
   }
 
@@ -186,15 +204,39 @@ class _HomeState extends State<Home> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
+                  Row(
                     children: [
-                      Support(
-                        isUsedSuppord: isUsedSupport,
-                        changeSupport: changeSupport,
+                      Column(
+                        children: [
+                          Power(
+                            isUsedPower: isUsedVSTAR,
+                            name: 'VSTAR',
+                            imagePath: 'assets/images/vstar.png',
+                            usePower: useVSTAR,
+                          ),
+                          Power(
+                            isUsedPower: isUsedGX,
+                            name: 'GX',
+                            imagePath: 'assets/images/gx.png',
+                            usePower: useGX,
+                          ),
+                        ],
                       ),
-                      Power(
-                        isUsedPower: isUsedPower,
-                        usePower: usePower,
+                      Column(
+                        children: [
+                          OneActionPerTurn(
+                            isUsed: isUsedSupport,
+                            actionName: 'サポート',
+                            imagePath: 'assets/images/pokemon-trainer.png',
+                            changeStatus: changeSupportStatus,
+                          ),
+                          OneActionPerTurn(
+                            isUsed: isUsedEnergy,
+                            actionName: '手貼り',
+                            imagePath: 'assets/images/energy.png',
+                            changeStatus: changeEnergyStatus,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -396,23 +438,25 @@ class DraggableCard extends StatelessWidget {
   }
 }
 
-class Support extends StatelessWidget {
-  final bool isUsedSuppord;
-  final Function() changeSupport;
+class OneActionPerTurn extends StatelessWidget {
+  final bool isUsed;
+  final String actionName;
+  final String imagePath;
+  final Function() changeStatus;
 
-  const Support({super.key, required this.isUsedSuppord, required this.changeSupport});
+  const OneActionPerTurn({super.key, required this.isUsed, required this.actionName ,required this.imagePath,required this.changeStatus});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        changeSupport();
+        changeStatus();
       },
       child: AnimatedSwitcher(
         duration: const Duration(seconds: 0),
-        child: isUsedSuppord? SizedBox(
+        child: isUsed? SizedBox(
           key: const ValueKey(true),
-                width: SizeConfig.blockSizeHorizontal * 20,
+                width: SizeConfig.blockSizeHorizontal * 15,
                 height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
@@ -422,15 +466,15 @@ class Support extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Image.asset('assets/images/pokemon-trainer.png'),
+                        child: Image.asset(imagePath),
                       ),
-                      const Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                      const Text('使用済', style: TextStyle(fontSize: 10.0, color: Colors.white),),
                     ],
                   )
                 ),
               ): SizedBox(
                 key: const ValueKey(false),
-                width: SizeConfig.blockSizeHorizontal * 20,
+                width: SizeConfig.blockSizeHorizontal * 15,
                 height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
@@ -440,9 +484,9 @@ class Support extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Image.asset('assets/images/pokemon-trainer.png'),
+                        child: Image.asset(imagePath),
                       ),
-                      const Text('サポート', style: TextStyle(fontSize: 20.0),),
+                      Text(actionName, style: const TextStyle(fontSize: 10.0),),
                     ],
                   )
                 )
@@ -454,9 +498,11 @@ class Support extends StatelessWidget {
 
 class Power extends StatelessWidget {
   final bool isUsedPower;
+  final String name;
+  final String imagePath;
   final Function() usePower;
 
-  const Power({super.key, required this.isUsedPower, required this.usePower});
+  const Power({super.key, required this.isUsedPower, required this.name, required this.imagePath, required this.usePower});
 
   @override
   Widget build(BuildContext context) {
@@ -468,7 +514,7 @@ class Power extends StatelessWidget {
         duration: const Duration(seconds: 0),
         child: isUsedPower? SizedBox(
           key: const ValueKey(true),
-                width: SizeConfig.blockSizeHorizontal * 20,
+                width: SizeConfig.blockSizeHorizontal * 15,
                 height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
@@ -478,15 +524,15 @@ class Power extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Image.asset('assets/images/monster_ball.png'),
+                        child: Image.asset(imagePath),
                       ),
-                      const Text('使用済', style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                      const Text('使用済', style: TextStyle(fontSize: 10.0, color: Colors.white),),
                     ],
                   )
                 ),
               ): SizedBox(
                 key: const ValueKey(false),
-                width: SizeConfig.blockSizeHorizontal * 20,
+                width: SizeConfig.blockSizeHorizontal * 15,
                 height: SizeConfig.blockSizeHorizontal * 8,
                 child: Card(
                   elevation: 5,
@@ -496,9 +542,9 @@ class Power extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Image.asset('assets/images/monster_ball.png'),
+                        child: Image.asset(imagePath),
                       ),
-                      const Text('特殊技', style: TextStyle(fontSize: 20.0),),
+                      Text(name, style: const TextStyle(fontSize: 10.0),),
                     ],
                   )
                 )
@@ -521,8 +567,8 @@ class Trash extends StatelessWidget {
         },
         builder: (_,__,___) {
           return SizedBox(
-            width: SizeConfig.blockSizeHorizontal * 20,
-            height: SizeConfig.blockSizeHorizontal * 15,
+            width: SizeConfig.blockSizeHorizontal * 16,
+            height: SizeConfig.blockSizeHorizontal * 16,
             child: Card(
               elevation: 5,
               color: Colors.grey,

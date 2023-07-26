@@ -70,6 +70,9 @@ flutter:
   assets:
     - assets/images/pokemon-trainer.png
     - assets/images/monster_ball.png
+    - assets/images/energy.png
+    - assets/images/vstar.png
+    - assets/images/gx.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
